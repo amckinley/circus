@@ -84,6 +84,8 @@ def convert_option(key, val):
         return val
     elif key == "priority":
         return int(val)
+    elif key == "dependencies":
+        return val.split() if val else []
 
     raise ArgumentError("unknown key %r" % key)
 
@@ -96,7 +98,7 @@ def validate_option(key, val):
                   'stderr_stream', 'max_age', 'max_age_variance',
                   'respawn', 'singleton', 'hooks', 'rlimits', 'copy_path',
                   'args', 'use_sockets', 'executable', 'priority',
-                  'autostart')
+                  'autostart', 'dependencies')
     valid_prefixes = ('stdout_stream', 'stderr_stream', 'hooks')
 
     def _valid_prefix():
