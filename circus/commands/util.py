@@ -50,6 +50,8 @@ def convert_option(key, val):
         return int(val)
     elif key == "priority":
         return int(val)
+    elif key == "dependencies":
+        return val.split() if val else []
 
     raise ArgumentError("unknown key %r" % key)
 
@@ -62,7 +64,7 @@ def validate_option(key, val):
                    'stderr_stream', 'max_age', 'max_age_variance',
                    'singleton', 'hooks', 'rlimits', 'copy_path', 'args',
                    'use_sockets', 'executable', 'priority', 'autostart',
-                   'respawn'):
+                   'respawn', 'dependencies'):
         raise MessageError('unknown key %r' % key)
 
     if key in ('numprocesses', 'flapping_attempts', 'max_retry', 'max_age',
