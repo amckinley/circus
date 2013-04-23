@@ -72,6 +72,10 @@ def convert_option(key, val):
         if name not in _HOOKS:
             raise ArgumentError(name)
         return val
+    elif key == "priority":
+        return int(val)
+    elif key == "dependencies":
+        return val.split() if val else []
 
     raise ArgumentError("unknown key %r" % key)
 
@@ -81,10 +85,11 @@ def validate_option(key, val):
                   'gid', 'send_hup', 'shell', 'env', 'cmd', 'copy_env',
                   'flapping_attempts', 'flapping_window', 'retry_in',
                   'max_retry', 'graceful_timeout', 'stdout_stream',
-                  'stderr_stream', 'max_age', 'max_age_variance', 'respawn',
-                  'hooks')
-
-    valid_prefixes = ('stdout_stream', 'stderr_stream')
+                  'stderr_stream', 'max_age', 'max_age_variance',
+                  'respawn', 'singleton', 'hooks', 'rlimits', 'copy_path',
+                  'args', 'use_sockets', 'executable', 'priority',
+                  'autostart', 'dependencies')
+    valid_prefixes = ('stdout_stream', 'stderr_stream', 'hooks')
 
     def _valid_prefix():
         for prefix in valid_prefixes:
