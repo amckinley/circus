@@ -4,6 +4,8 @@ import os
 import signal
 import time
 import sys
+import operator
+import datetime
 from random import randint
 
 from psutil import NoSuchProcess
@@ -554,8 +556,23 @@ class Watcher(object):
     @util.debuglog
     def status(self):
         if self.stopped:
-            return "stopped"
-        return "active"
+            watcher_status = 'stopped'
+        else:
+            watcher_status = 'active'
+        process_list = []
+        for pid, process in sorted(self.processes.iteritems(),
+                key=operator.itemgetter(0)):
+            status = process.status_name
+            info = process.info()
+            age = datetime.timedelta(seconds=info['age'])
+            datum = {
+                'pid': pid,
+                'status': status,
+                'uptime': str(age),
+            }
+            process_list.append(datum)
+
+        return {'watcher': watcher_status, 'processes': process_list}
 
     @util.debuglog
     def process_info(self, pid):
