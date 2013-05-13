@@ -64,5 +64,5 @@ class Upgrade(Command):
                 return ('This watcher is a Singleton - not raising the number '
                         ' of processes')
             else:
-                return str(msg.get("numprocesses"))
+                return 'Upgrade successful'
         return self.console_error(msg)
