@@ -73,7 +73,7 @@ class AddWatcher(Command):
             except StopIteration:
                 raise ArgumentError(
                     'Watcher "{0}" not present in config'.format(args[0]))
-            if 'env' in config:
+            if 'env' in options:
                 options['env'] = parse_env_dict(options['env'])
         elif len(args) < 2:
             raise ArgumentError("number of arguments invalid")
