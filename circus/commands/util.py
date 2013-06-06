@@ -30,6 +30,8 @@ def convert_option(key, val):
         return util.to_bool(val)
     elif key == "respawn":
         return util.to_bool(val)
+    elif key == "upgradable":
+        return util.to_bool(val)
     elif key == "env":
         return util.parse_env_dict(val)
     elif key == "cmd":
@@ -81,7 +83,7 @@ def validate_option(key, val):
                   'stderr_stream', 'max_age', 'max_age_variance',
                   'respawn', 'singleton', 'hooks', 'rlimits', 'copy_path',
                   'args', 'use_sockets', 'executable', 'priority',
-                  'autostart', 'dependencies')
+                  'autostart', 'dependencies', 'upgradable')
     valid_prefixes = ('stdout_stream', 'stderr_stream', 'hooks')
 
     def _valid_prefix():
@@ -123,5 +125,5 @@ def validate_option(key, val):
     if key in ('stderr_stream', 'stdout_stream'):
         for k, v in val.items():
             if not k in ('class', 'filename', 'refresh_time', 'max_bytes',
-                         'backup_count'):
+                         'backup_count', 'name'):
                 raise MessageError("%r is an invalid option for %r" % (k, key))
