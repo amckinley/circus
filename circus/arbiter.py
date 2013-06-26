@@ -302,6 +302,8 @@ class Arbiter(object):
 
         # Gather watcher names.
         current_wn = set([i.name for i in self.iter_watchers()])
+        if 'circusd-stats' in current_wn:
+            current_wn.remove('circusd-stats')
         new_wn = set([i['name'] for i in new_cfg.get('watchers', [])])
         new_wn = new_wn | set([i['name'] for i in new_cfg.get('plugins', [])])
         added_wn = (new_wn - current_wn) | wn_with_changed_socket
@@ -318,6 +320,8 @@ class Arbiter(object):
             w = self.get_watcher(n)
             new_watcher_cfg = (self.get_watcher_config(new_cfg, n) or
                                self.get_plugin_config(new_cfg, n))
+            if 'env' in new_watcher_cfg:
+                new_watcher_cfg['env'] = parse_env_dict(new_watcher_cfg['env'])
             old_watcher_cfg = w._cfg.copy()
 
             if 'env' in new_watcher_cfg:
