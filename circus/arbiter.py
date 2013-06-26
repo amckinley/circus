@@ -14,7 +14,7 @@ from circus.controller import Controller
 from circus.exc import AlreadyExist
 from circus import logger
 from circus.watcher import Watcher
-from circus.util import debuglog, _setproctitle
+from circus.util import debuglog, _setproctitle, parse_env_dict
 from circus.config import get_config
 from circus.plugins import get_plugin_cmd
 from circus.sockets import CircusSocket, CircusSockets
@@ -287,6 +287,8 @@ class Arbiter(object):
 
         # Gather watcher names.
         current_wn = set([i.name for i in self.iter_watchers()])
+        if 'circusd-stats' in current_wn:
+            current_wn.remove('circusd-stats')
         new_wn = set([i['name'] for i in new_cfg.get('watchers', [])])
         new_wn = new_wn | set([i['name'] for i in new_cfg.get('plugins', [])])
         added_wn = (new_wn - current_wn) | wn_with_changed_socket
@@ -303,6 +305,8 @@ class Arbiter(object):
             w = self.get_watcher(n)
             new_watcher_cfg = (self.get_watcher_config(new_cfg, n) or
                                self.get_plugin_config(new_cfg, n))
+            if 'env' in new_watcher_cfg:
+                new_watcher_cfg['env'] = parse_env_dict(new_watcher_cfg['env'])
             old_watcher_cfg = w._cfg.copy()
             if new_watcher_cfg != old_watcher_cfg:
                 if not w.name.startswith('plugin:'):
