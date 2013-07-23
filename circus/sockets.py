@@ -18,12 +18,12 @@ _TYPE = {
     'SOCK_SEQPACKET': socket.SOCK_SEQPACKET
 }
 
-
 def addrinfo(host, port):
     for _addrinfo in socket.getaddrinfo(host, port):
         if len(_addrinfo[-1]) == 2:
             return _addrinfo[-1][-2], _addrinfo[-1][-1]
-
+        if len(_addrinfo[-1]) == 4:
+            return _addrinfo[-1][-4], _addrinfo[-1][-3]
     raise ValueError((host, port))
 
 
@@ -91,7 +91,10 @@ class CircusSocket(socket.socket):
             self.listen(self.backlog)
 
         if not self.is_unix:
-            self.host, self.port = self.getsockname()
+            if self.family = socket.AF_INET6:
+                self.host, self.prot, _flowinfo, _scopeid = self.getsockname()
+            else:
+                self.host, self.port = self.getsockname()
 
         logger.debug('Socket bound at %s - fd: %d' % (self.location,
                                                       self.fileno()))
