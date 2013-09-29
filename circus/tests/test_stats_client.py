@@ -65,10 +65,10 @@ class TestStatsClient(TestCircus):
 
         # making sure the stats process run
         res = client.send_message('status', name='test')
-        self.assertEqual(res['status'], 'active')
+        self.assertEqual(res['status']['watcher'], 'active')
 
         res = client.send_message('status', name='circusd-stats')
-        self.assertEqual(res['status'], 'active')
+        self.assertEqual(res['status']['watcher'], 'active')
 
         # playing around with the stats now: we should get some !
         from circus.stats.client import StatsClient

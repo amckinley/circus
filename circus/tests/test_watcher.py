@@ -325,7 +325,7 @@ class TestWatcherHooks(TestCircus):
         self.call("stop", name="test", async=False)
 
     def get_status(self):
-        return self.call("status", name="test")['status']
+        return self.call("status", name="test")['status']['watcher']
 
     def test_missing_hook(self):
         hooks = {'before_start': ('fake.hook.path', False)}

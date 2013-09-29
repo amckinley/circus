@@ -67,7 +67,7 @@ class CommandlineTest(TestCircus):
         self.assertEqual(stdout, 'ok\n')
         stdout, stderr = run_ctl('status test2')
         self.assertEqual(stderr, '')
-        self.assertEqual(stdout, 'active\n')
+        self.assertEqual(stdout.split(':')[0], 'active')
 
 
 class CLITest(TestCircus):
@@ -89,7 +89,7 @@ class CLITest(TestCircus):
         output = stdout.splitlines()
         self.assertEqual(output[0], VERSION)
         # strip of term escape characters, if any
-        prompt = output[2][-len(CircusCtl.prompt):]
+        prompt = output[3][-len(CircusCtl.prompt):]
         self.assertEqual(prompt, CircusCtl.prompt)
 
     def test_cli_help(self):
@@ -97,4 +97,4 @@ class CLITest(TestCircus):
         self.assertEqual(stderr, '')
         prompt = stdout.splitlines()
         # first two lines are VERSION and prompt, followed by a blank line
-        self.assertEqual(prompt[3], "Documented commands (type help <topic>):")
+        self.assertEqual(prompt[4], "Documented commands (type help <topic>):")
