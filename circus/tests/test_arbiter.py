@@ -148,7 +148,7 @@ class TestTrainer(TestCircus):
         resp = self.cli.call(make_message("start", name="test1"))
         self.assertEqual(resp.get("status"), "ok")
         resp = self.cli.call(make_message("status", name="test1"))
-        self.assertEqual(resp.get("status"), "active")
+        self.assertEqual(resp.get("status")['watcher'], "active")
 
     def test_add_watcher6(self):
         cmd, args = self._get_cmd_args()
@@ -158,7 +158,7 @@ class TestTrainer(TestCircus):
         self.assertEqual(resp.get("status"), "ok")
 
         resp = self.cli.call(make_message("status", name="test1"))
-        self.assertEqual(resp.get("status"), "active")
+        self.assertEqual(resp.get("status")['watcher'], "active")
 
     def test_add_watcher7(self):
         cmd, args = self._get_cmd_args()
@@ -168,7 +168,7 @@ class TestTrainer(TestCircus):
         self.assertEqual(resp.get("status"), "ok")
 
         resp = self.cli.call(make_message("status", name="test1"))
-        self.assertEqual(resp.get("status"), "active")
+        self.assertEqual(resp.get("status")['watcher'], "active")
 
         resp = self.cli.call(make_message("options", name="test1"))
         options = resp.get('options', {})
@@ -235,12 +235,12 @@ class TestTrainer(TestCircus):
     def test_stop_watchers(self):
         self.cli.call(make_message("stop", async=False))
         resp = self.cli.call(make_message("status", name="test"))
-        self.assertEqual(resp.get("status"), "stopped")
+        self.assertEqual(resp.get("status")['watcher'], "stopped")
 
     def test_stop_watchers2(self):
         self.cli.call(make_message("stop", name="test", async=False))
         resp = self.cli.call(make_message("status", name="test"))
-        self.assertEqual(resp.get('status'), "stopped")
+        self.assertEqual(resp.get('status')['watcher'], "stopped")
 
     def test_stop_watchers3(self):
         cmd, args = self._get_cmd_args()
@@ -253,10 +253,10 @@ class TestTrainer(TestCircus):
 
         self.cli.call(make_message("stop", name="test1"))
         resp = self.cli.call(make_message("status", name="test1"))
-        self.assertEqual(resp.get('status'), "stopped")
+        self.assertEqual(resp.get('status')['watcher'], "stopped")
 
         resp = self.cli.call(make_message("status", name="test"))
-        self.assertEqual(resp.get('status'), "active")
+        self.assertEqual(resp.get('status')['watcher'], "active")
 
     def test_plugins(self):
         # killing the setUp runner
@@ -393,6 +393,6 @@ class TestArbiter(unittest.TestCase):
         try:
             arbiter.start()
             sleep(.1)
-            self.assertEqual(arbiter.watchers[0].status(), 'active')
+            self.assertEqual(arbiter.watchers[0].status()['watcher'], 'active')
         finally:
             arbiter.stop()

@@ -75,13 +75,16 @@ class AddWatcher(Command):
                     'Watcher "{0}" not present in config'.format(args[0]))
             if 'env' in options:
                 options['env'] = parse_env_dict(options['env'])
+            return self.make_message(name=options.pop('name'),
+                         cmd=options.pop('cmd'),
+                         start=opts.get('start', False),
+                         options=options)
+
         elif len(args) < 2:
             raise ArgumentError("number of arguments invalid")
 
-        return self.make_message(name=options.pop('name'),
-                                 cmd=options.pop('cmd'),
-                                 start=opts.get('start', False),
-                                 options=options)
+        return self.make_message(name=args[0], cmd=" ".join(args[1:]),
+                                 start=opts.get('start', False))
 
     def execute(self, arbiter, props):
         options = props.get('options', {})
