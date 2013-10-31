@@ -457,8 +457,8 @@ class Watcher(object):
             if process.status == DEAD_OR_ZOMBIE:
                 self.processes.pop(process.pid)
             else:
-                self.processes.pop(process.pid)
                 self.kill_process(process)
+                self.processes.pop(process.pid)
 
     @util.debuglog
     def reap_and_manage_processes(self):
@@ -798,7 +798,9 @@ class Watcher(object):
             return False
 
         self._create_redirectors()
-        self.reap_processes()
+
+        # XXX: this will kill our existing process
+        #self.reap_processes()
         self.spawn_processes()
 
         if not self.call_hook('after_start'):
@@ -874,7 +876,7 @@ class Watcher(object):
         """Set a watcher option.
 
         This function set the watcher options. unknown keys are ignored.
-        This function return an action number:
+        This function returns an action number:
 
         - 0: trigger the process management
         - 1: trigger a graceful reload of the processes;
