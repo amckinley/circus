@@ -793,7 +793,7 @@ class Watcher(object):
         self.stopped = False
 
         if not self.call_hook('before_start'):
-            logger.debug('Aborting startup')
+            logger.debug('Aborting startup: failed before_start() hook')
             self.stopped = True
             return False
 
@@ -802,8 +802,8 @@ class Watcher(object):
         self.spawn_processes()
 
         if not self.call_hook('after_start'):
-            logger.debug('Aborting startup')
-            self.stop()
+            logger.debug('Aborting startup: failed after_start() hook')
+            self.stop(async=False)
             return False
 
         if self.stdout_redirector is not None:

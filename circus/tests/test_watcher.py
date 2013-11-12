@@ -374,7 +374,7 @@ class TestWatcherHooks(TestCircus):
 
     def test_before_start_false(self):
         self._test_hooks(behavior=FAILURE, status='stopped',
-                         hook_name='after_start')
+                         hook_name='before_start')
 
     def test_after_start(self):
         self._test_hooks(hook_name='after_start')
